@@ -1,0 +1,7 @@
+{
+	"RoutePrefix":"Dropbag",
+
+	"Folder":"./",
+
+	"DefaultFile":"index.html"
+}
