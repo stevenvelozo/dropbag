@@ -1,6 +1,6 @@
 {
   "name": "dropbag",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "File persist and read abstraction",
   "main": "Dropbag.js",
   "scripts": {
