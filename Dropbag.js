@@ -32,6 +32,9 @@ var Dropbag = function()
 		var storeFile = require(`${__dirname}/behaviors/Dropbag-StoreFile.js`);
 		var readFile = require(`${__dirname}/behaviors/Dropbag-ReadFile.js`);
 
+		var fileExists = require(`${__dirname}/behaviors/Dropbag-Exists.js`);
+		var fileInfo = require(`${__dirname}/behaviors/Dropbag-Info.js`);
+
 		var getMimeType = require(`${__dirname}/behaviors/Dropbag-GetMimeType.js`);
 
 		var _Parameters = false; 
@@ -73,6 +76,9 @@ var Dropbag = function()
 			
 			storeFile: storeFile,
 			readFile: readFile,
+
+			fileExists: fileExists,
+			fileInfo: fileInfo,
 
 			getMimeType: getMimeType,
 
