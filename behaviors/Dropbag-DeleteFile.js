@@ -37,6 +37,7 @@ var deleteFile = (pParameters, fCallback) =>
 
 
 	// Delete the file.
+	// TODO: Decide if we should stat on each one and branch for folders.  Discuss with Jason.
 	libFS.unlink(pParameters.Path + '/' + pParameters.File,
 		(pError)=>
 		{
