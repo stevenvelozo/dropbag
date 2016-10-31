@@ -34,13 +34,14 @@ var fileInfo = (pParameters, fCallback) =>
 		return false;
 	}
 
-	libFS.stat(pParameters.Path + '/' + pParameters.File, (pError, pFileStats) =>
-	{
-		if (pError)
-			return fStageComplete(pError, {});
-		
-		return fStageComplete(false, pFileStats);
-	});
+	libFS.stat(pParameters.Path + '/' + pParameters.File,
+		(pError, pFileStats) =>
+		{
+			if (pError)
+				return fCallback(pError, {});
+			
+			return fCallback(false, pFileStats);
+		});
 
 	return false;
 };

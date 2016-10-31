@@ -32,6 +32,12 @@ var makeFolderRecursive = (pParameters, fCallback) =>
         return false;
     }
 
+	if ((typeof(pParameters.Path) !== 'string'))
+	{
+		fCallback(new Error('Parameters object needs a path to run the folder create operation.'));
+		return false;
+	}
+
     // If the mode isn't passed in, build it
     // TODO: Fable setting for default mode?
     if (typeof(pParameters.Mode) === 'undefined')
@@ -76,7 +82,7 @@ var makeFolderRecursive = (pParameters, fCallback) =>
             if (pError && pError.code=='ENOENT')
             {
                 /* Path doesn't exist, create it */
-                //console.log('Created '+ pParameters.ActualPathParts[pParameters.CurrentPathIndex]+' ===> '+pParameters.CurrentPath + libPath.sep + pParameters.ActualPathParts[pParameters.CurrentPathIndex])
+               // console.log('Created '+ pParameters.ActualPathParts[pParameters.CurrentPathIndex]+' ===> '+pParameters.CurrentPath + libPath.sep + pParameters.ActualPathParts[pParameters.CurrentPathIndex])
                 libFS.mkdir(pParameters.CurrentPath + libPath.sep + pParameters.ActualPathParts[pParameters.CurrentPathIndex], pParameters.Mode,
                 (pCreateError)=>
                 {

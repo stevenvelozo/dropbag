@@ -31,6 +31,7 @@ var Dropbag = function()
 		
 		var storeFile = require(`${__dirname}/behaviors/Dropbag-StoreFile.js`);
 		var readFile = require(`${__dirname}/behaviors/Dropbag-ReadFile.js`);
+		var deleteFile = require(`${__dirname}/behaviors/Dropbag-DeleteFile.js`)
 
 		var fileExists = require(`${__dirname}/behaviors/Dropbag-Exists.js`);
 		var fileInfo = require(`${__dirname}/behaviors/Dropbag-Info.js`);
@@ -76,6 +77,7 @@ var Dropbag = function()
 			
 			storeFile: storeFile,
 			readFile: readFile,
+			deleteFile: deleteFile,
 
 			fileExists: fileExists,
 			fileInfo: fileInfo,

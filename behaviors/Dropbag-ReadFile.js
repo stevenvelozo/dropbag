@@ -18,7 +18,7 @@ var libMime = require('mime');
 	{
 		Stream: false,
 		File: 'index.html',
-		Path: '/home/harry/some/folder/to/create'
+		Path: '/home/harry/some/folder'
 	}
 
  Note if stream is set to true, the function returns a stream object you can then pipe bytes from.
