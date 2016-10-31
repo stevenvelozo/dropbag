@@ -121,7 +121,8 @@ suite
 								fTestDone();
 							});
 					}
-				);				test
+				);
+				test
 				(
 					'get file exists',
 					(fTestDone) =>
@@ -143,6 +144,32 @@ suite
 							(pError, pExists) =>
 							{
 								Expect(pExists).to.not.equal('Bobsyouruncle');
+								fTestDone();
+							});
+					}
+				);
+				test
+				(
+					'get file listing',
+					(fTestDone) =>
+					{
+						libDropbag.fileList({Path:TEST_STAGING},
+							(pError, pPath, pList) =>
+							{
+								Expect(pList[0]).to.contain('Test.txt');
+								fTestDone();
+							});
+					}
+				);
+				test
+				(
+					'fail to get file exists',
+					(fTestDone) =>
+					{
+						libDropbag.fileList({Path:TEST_STAGING+'DoesNotExistYo'},
+							(pError, pList) =>
+							{
+								Expect(pError.code).to.equal('ENOENT');
 								fTestDone();
 							});
 					}

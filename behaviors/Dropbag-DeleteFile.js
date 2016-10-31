@@ -37,7 +37,7 @@ var deleteFile = (pParameters, fCallback) =>
 
 
 	// Delete the file.
-	// TODO: Decide if we should stat on each one and branch for folders.  Discuss with Jason.
+	// TODO: Decide if we should stat on each one and branch for folders.  Discuss with Jason, based on tags vis-a-vis mongo gridfs.
 	libFS.unlink(pParameters.Path + '/' + pParameters.File,
 		(pError)=>
 		{
