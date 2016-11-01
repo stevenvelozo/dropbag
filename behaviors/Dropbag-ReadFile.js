@@ -53,7 +53,7 @@ var readFile = (pParameters, fCallback) =>
 						if (pError)
 							return fStageComplete(pError, {});
 						else
-							return fStageComplete(false, pFileStats);
+							return fStageComplete(null, pFileStats);
 					});
 				},
 			],
@@ -99,7 +99,7 @@ var readFile = (pParameters, fCallback) =>
 					return false;
 				}
 
-				fCallback(pError, pData);
+				fCallback(null, pData);
 				return true;
 			}
 		);

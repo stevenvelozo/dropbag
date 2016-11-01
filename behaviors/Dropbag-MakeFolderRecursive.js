@@ -71,7 +71,7 @@ var makeFolderRecursive = (pParameters, fCallback) =>
     // Check if the path is fully complete
     if (pParameters.CurrentPathIndex >= pParameters.ActualPathParts.length)
     {
-        fCallback();
+        fCallback(null);
         return true;
     }
 
@@ -94,7 +94,7 @@ var makeFolderRecursive = (pParameters, fCallback) =>
                     }
                     else
                     {
-                        fCallback();
+                        fCallback(pCreateError);
                         return false;
                     }
                 });  

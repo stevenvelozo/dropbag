@@ -40,7 +40,7 @@ var fileList = (pParameters, fCallback) =>
 			if (pError)
 				return fCallback(pError, {});
 			
-			return fCallback(false, pParameters.Path, pFiles);
+			return fCallback(null, pParameters.Path, pFiles);
 		});
 
 	return false;

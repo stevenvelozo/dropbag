@@ -67,7 +67,7 @@ var storeFile = (pParameters, fCallback) =>
 					if (pParameters.hasOwnProperty('AutoCreateFolders') && pParameters.AutoCreateFolders)
 						makeFolderRecursive({Path:pParameters.Path},fStageComplete);
 					else
-						fStageComplete();
+						fStageComplete(null);
 					// STREAMS ARE INCOMPLETE
 				}
 			],
@@ -98,7 +98,7 @@ var storeFile = (pParameters, fCallback) =>
 							return false;
 						}
 
-						fCallback();
+						fCallback(null);
 						return true;
 					}
 				);
