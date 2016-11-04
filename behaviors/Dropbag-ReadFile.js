@@ -24,8 +24,7 @@ var libMime = require('mime');
  Note if stream is set to true, the function returns a stream object you can then pipe bytes from.
 */
 
-
-var readFile = (pParameters, fCallback) =>
+module.exports = (pParameters, fCallback) =>
 {
 	if (typeof(pParameters) !== 'object')
 	{
@@ -105,5 +104,3 @@ var readFile = (pParameters, fCallback) =>
 		);
 	}
 };
-
-module.exports = readFile;

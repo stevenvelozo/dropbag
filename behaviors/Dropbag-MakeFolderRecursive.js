@@ -23,7 +23,6 @@ var libPath = require('path');
  This behavior is only really useful for file-based storage, but is a good utility to have with this kit.
 */
 
-
 var makeFolderRecursive = (pParameters, fCallback) =>
 {
     if (typeof(pParameters) !== 'object')

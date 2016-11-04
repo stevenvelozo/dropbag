@@ -11,10 +11,7 @@ var libMime = require('mime');
 * Get Mime typs
 */
 
-
-var getMimeType = (pFileName) =>
+module.exports = (pFileName) =>
 {
 	return libMime.lookup(pFileName);
 };
-
-module.exports = getMimeType;

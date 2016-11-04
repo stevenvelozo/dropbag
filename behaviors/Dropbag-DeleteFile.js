@@ -20,8 +20,7 @@ var libAsync = require('async')
 	}
 */
 
-
-var deleteFile = (pParameters, fCallback) =>
+module.exports = (pParameters, fCallback) =>
 {
 	if (typeof(pParameters) !== 'object')
 	{
@@ -52,5 +51,3 @@ var deleteFile = (pParameters, fCallback) =>
 		}
 	);
 };
-
-module.exports = deleteFile;

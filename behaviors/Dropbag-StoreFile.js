@@ -31,8 +31,7 @@ var makeFolderRecursive = require(__dirname+'/Dropbag-MakeFolderRecursive.js');
  Note if stream is set to true, the function returns a stream object you can then pipe bytes into.
 */
 
-
-var storeFile = (pParameters, fCallback) =>
+module.exports = (pParameters, fCallback) =>
 {
 	if (typeof(pParameters) !== 'object')
 	{
@@ -106,5 +105,3 @@ var storeFile = (pParameters, fCallback) =>
 		);
 	}
 };
-
-module.exports = storeFile;

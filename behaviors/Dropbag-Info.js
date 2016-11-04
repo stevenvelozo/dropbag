@@ -19,8 +19,7 @@ var libFS = require('fs');
 	}
 */
 
-
-var fileInfo = (pParameters, fCallback) =>
+module.exports = (pParameters, fCallback) =>
 {
 	if (typeof(pParameters) !== 'object')
 	{
@@ -45,5 +44,3 @@ var fileInfo = (pParameters, fCallback) =>
 
 	return false;
 };
-
-module.exports = fileInfo;

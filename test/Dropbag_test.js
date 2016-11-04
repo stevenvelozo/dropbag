@@ -187,6 +187,77 @@ suite
 							});
 					}
 				);
+				test
+				(
+					'create a deep folder recursively',
+					(fTestDone) =>
+					{
+						libDropbag.makeFolderRecursive({Path:TEST_STAGING+'/This/Folder/Is/Deep'},
+							(pError) =>
+							{
+								libFS.stat(TEST_STAGING+'/This/Folder/Is/Deep', 
+									(pError, pFileStats) =>
+									{
+										Expect(pError).to.equal(null, 'Dropbag should create many folders recursively.');
+										
+										// Now store a deep file
+										libDropbag.storeFile({Path:TEST_STAGING+'/This/Folder/Is', File:'DeepTest.txt', Data:'This was a really deep test'},
+											(pError) =>
+											{
+												libFS.stat(TEST_STAGING+'/This/Folder/Is/DeepTest.txt', 
+													(pError, pFileStats) =>
+													{
+														Expect(pError).to.equal(null, 'Dropbag should create files correctly.');
+											
+														// File exists
+														return fTestDone();
+													});
+											});
+									});
+							});
+					}
+				);
+				test
+				(
+					'delete a folder recursively',
+					(fTestDone) =>
+					{
+						libDropbag.deleteFolderRecursively({Path:TEST_STAGING+'/This'},
+							(pError) =>
+							{
+								Expect(pError).to.equal(null, 'Dropbag should delete many folders recursively.');
+								fTestDone();
+							});
+					}
+				);
+				test
+				(
+					'check the heritage of some paths',
+					() =>
+					{
+						Expect(libDropbag.checkHeritage(
+							{
+								Path:'/This/Matches/That',
+								Lineage:'/This/DoesNot/Matches/That'
+							})).to.equal(false);
+						Expect(libDropbag.checkHeritage(
+							{
+								Path:'/This/Matches/That',
+								Lineage:'/This'
+							})).to.equal(true);
+						Expect(libDropbag.checkHeritage(
+							{
+								Path:'/This',
+								Lineage:'/This/Thing'
+							})).to.equal(false);
+						Expect(libDropbag.checkHeritage(
+							{
+								Path:'/This/Matches/That',
+								Lineage:'/Then/Something'
+							})).to.equal(false);
+					}
+				);
+				
 			}
 		);
 	}

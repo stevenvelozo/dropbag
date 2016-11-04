@@ -21,8 +21,7 @@ var libFS = require('fs');
  The callback is called with parameter 1 as the error code (or false) and parameter 2 as if the file exists or not.
 */
 
-
-var fileExists = (pParameters, fCallback) =>
+module.exports = (pParameters, fCallback) =>
 {
 	if (typeof(pParameters) !== 'object')
 	{
@@ -52,5 +51,3 @@ var fileExists = (pParameters, fCallback) =>
 
 	return false;
 };
-
-module.exports = fileExists;

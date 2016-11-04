@@ -28,6 +28,7 @@ var Dropbag = function()
 		}
 
 		var makeFolderRecursive = require(`${__dirname}/behaviors/Dropbag-MakeFolderRecursive.js`);
+		var deleteFolderRecursively = require(`${__dirname}/behaviors/Dropbag-DeleteFolderRecursive.js`);
 		
 		var storeFile = require(`${__dirname}/behaviors/Dropbag-StoreFile.js`);
 		var readFile = require(`${__dirname}/behaviors/Dropbag-ReadFile.js`);
@@ -36,6 +37,7 @@ var Dropbag = function()
 		var fileList = require(`${__dirname}/behaviors/Dropbag-ListFiles.js`);
 		var fileExists = require(`${__dirname}/behaviors/Dropbag-Exists.js`);
 		var fileInfo = require(`${__dirname}/behaviors/Dropbag-Info.js`);
+		var checkHeritage = require(`${__dirname}/behaviors/Dropbag-CheckHeritage.js`);
 
 		var getMimeType = require(`${__dirname}/behaviors/Dropbag-GetMimeType.js`);
 
@@ -75,6 +77,7 @@ var Dropbag = function()
 			connectRoutes: connectRoutes,
 			
 			makeFolderRecursive: makeFolderRecursive,
+			deleteFolderRecursively: deleteFolderRecursively,
 			
 			storeFile: storeFile,
 			readFile: readFile,
@@ -83,6 +86,7 @@ var Dropbag = function()
 			fileList: fileList,
 			fileExists: fileExists,
 			fileInfo: fileInfo,
+			checkHeritage: checkHeritage,
 
 			getMimeType: getMimeType,
 
