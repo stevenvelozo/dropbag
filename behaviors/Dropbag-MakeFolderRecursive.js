@@ -78,6 +78,11 @@ var makeFolderRecursive = (pParameters, fCallback) =>
     libFS.open(pParameters.CurrentPath + libPath.sep + pParameters.ActualPathParts[pParameters.CurrentPathIndex], 'r',
         function(pError, pFileDescriptor)
         {
+            if (pFileDescriptor)
+            {
+                libFS.closeSync(pFileDescriptor); //do not keep file handles open
+            }
+
             if (pError && pError.code=='ENOENT')
             {
                 /* Path doesn't exist, create it */
