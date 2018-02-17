@@ -98,6 +98,105 @@ suite
 				);
 				test
 				(
+					'read a file with streams',
+					(fTestDone) =>
+					{
+						libDropbag.readFile({Path:__dirname, File:'Input.txt',Stream:true},
+							(pError, pFileInfo) =>
+							{
+								Expect(pFileInfo.length).to.equal(52);
+								// Now open the stream.
+								var tmpStream = pFileInfo.getStream();
+								tmpStream.on('data',
+									(pChunk) =>
+									{
+										Expect(pChunk.toString()).to.equal('0123456789Byte 11 is where the fun starts.0123456789');
+										//console.log(pChunk.toString());
+									}
+								);
+								tmpStream.on('end',
+									() =>
+									{
+										//console.log(`Read of ${pFileInfo.filename} complete.`);
+										fTestDone();
+									}
+								);
+							});
+					}
+				);
+				test
+				(
+					'read part of a file with streams',
+					(fTestDone) =>
+					{
+						libDropbag.readFile({Path:__dirname, File:'Input.txt',Stream:true},
+							(pError, pFileInfo) =>
+							{
+								Expect(pFileInfo.length).to.equal(52);
+								// Now open the stream.
+								var tmpStream = pFileInfo.getStream(10, 41);
+								tmpStream.on('data',
+									(pChunk) =>
+									{
+										Expect(pChunk.toString()).to.equal('Byte 11 is where the fun starts.');
+										//console.log(pChunk.toString());
+									}
+								);
+								tmpStream.on('end',
+									() =>
+									{
+										//console.log(`Read of ${pFileInfo.filename} complete.`);
+										fTestDone();
+									}
+								);
+							});
+					}
+				);
+				test
+				(
+					'get file listing',
+					(fTestDone) =>
+					{
+						libDropbag.fileList({Path:TEST_STAGING},
+							(pError, pPath, pList) =>
+							{
+								Expect(pList[0]).to.contain('Test.txt');
+								fTestDone();
+							});
+					}
+				);				test
+				(
+					'store a file with streams',
+					(fTestDone) =>
+					{
+						libDropbag.storeFile({Path:TEST_STAGING, File:'StreamWrite.txt', Stream:true},
+							(pError, pFileInfo) =>
+							{
+							    //console.log(JSON.stringify(pFileInfo));
+							    var tmpWriteStream = pFileInfo.getWriteStream();
+							    tmpWriteStream.write('First write!');
+							    // Now read it.
+								libDropbag.readFile({Path:TEST_STAGING, File:'StreamWrite.txt'},
+									(pError, pData) =>
+									{
+										Expect(pData).to.contain('First write!');
+									    tmpWriteStream.write('Second write!');
+									    // Now read it again!
+										libDropbag.readFile({Path:TEST_STAGING, File:'StreamWrite.txt'},
+											(pError, pData) =>
+											{
+												Expect(pData).to.contain('First write!');
+												// Now close it.
+												tmpWriteStream.close();
+												fTestDone();
+											});
+									});
+							});
+					}
+				);
+
+				test
+				(
 					'get file info',
 					(fTestDone) =>
 					{
@@ -150,19 +249,6 @@ suite
 				);
 				test
 				(
-					'get file listing',
-					(fTestDone) =>
-					{
-						libDropbag.fileList({Path:TEST_STAGING},
-							(pError, pPath, pList) =>
-							{
-								Expect(pList[0]).to.contain('Test.txt');
-								fTestDone();
-							});
-					}
-				);
-				test
-				(
 					'fail to get file exists',
 					(fTestDone) =>
 					{
@@ -180,6 +266,19 @@ suite
 					(fTestDone) =>
 					{
 						libDropbag.deleteFile({Path:TEST_STAGING, File:'Test.txt'},
+							(pError) =>
+							{
+								Expect(pError).to.equal(undefined);
+								fTestDone();
+							});
+					}
+				);
+				test
+				(
+					'delete a file',
+					(fTestDone) =>
+					{
+						libDropbag.deleteFile({Path:TEST_STAGING, File:'StreamWrite.txt'},
 							(pError) =>
 							{
 								Expect(pError).to.equal(undefined);

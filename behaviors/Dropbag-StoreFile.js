@@ -19,6 +19,8 @@ var makeFolderRecursive = require(__dirname+'/Dropbag-MakeFolderRecursive.js');
 	{
 		Data: '<html><head></head><body></body></html>',
 		Stream: false,
+		Append: false,
+		Encoding: 'utf8',
 		AutoCreateFolders: true,
 		File: 'index.html',
 		Path: '/home/harry/some/folder/to/create',
@@ -49,9 +51,54 @@ module.exports = (pParameters, fCallback) =>
 
 	if (tmpStream)
 	{
-		// If this is a stream-based protocol, we will just return the stream
-		fCallback();
-		// This should be a stream
+		var tmpFileFullPath = pParameters.Path + '/' + pParameters.File;
+		libAsync.waterfall(
+			[
+				function (fStageComplete)
+				{
+					libFS.stat(tmpFileFullPath, (pError, pFileStats) =>
+					{
+						if (pError && pError.code == 'ENOENT')
+							return fStageComplete(null, {size:-1,exists:false});
+						else if (pError)
+							return fStageComplete(pError, {});
+						else
+							return fStageComplete(null, pFileStats);
+					});
+				},
+			],
+			function(pError, pFileStats)
+			{
+				if (pError)
+					return fCallback(pError);
+
+				var tmpFileInfo = {};
+				// Abstract here when mongo, etc. is broken out.
+				tmpFileInfo.Type = 'local';
+				tmpFileInfo.filename = tmpFileFullPath;
+				tmpFileInfo.length = pFileStats.size;
+				tmpFileInfo.stats = pFileStats;
+
+				var tmpMode = (typeof(pParameters.Mode) === 'undefined') ? pParameters.Mode = parseInt('0744', 8) & ~process.umask() : pParameters.Mode;
+				var tmpEncoding = (typeof(pParameters.Encoding) === 'undefined') ? 'utf8' : pParameters.Encoding;
+				// Right now support basic append or write streams.
+				var tmpFlags = (pParameters.Append) ? 'a' : 'w';
+				tmpFileInfo.writeStreamOptions = (
+				{
+					'flags': tmpFlags,
+					'encoding': tmpEncoding,
+					'mode': tmpMode
+				});
+
+				tmpFileInfo.getWriteStream = () =>
+				{
+					return libFS.createWriteStream(tmpFileInfo.filename, tmpFileInfo.writeStreamOptions);
+				};
+
+				return fCallback(null, tmpFileInfo);
+			}
+		);
+
 		return false;
 	}
 	else

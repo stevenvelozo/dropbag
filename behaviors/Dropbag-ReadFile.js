@@ -67,6 +67,7 @@ module.exports = (pParameters, fCallback) =>
 				tmpFileInfo.filename = tmpFileFullPath;
 				tmpFileInfo.length = pFileStats.size;
 				tmpFileInfo.contentType = libMime.lookup(tmpFileFullPath);
+				tmpFileInfo.stats = pFileStats;
 				tmpFileInfo.getStream = (pStart, pEnd) =>
 				{
 					var tmpRange = {};
