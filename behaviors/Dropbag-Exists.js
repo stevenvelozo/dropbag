@@ -3,13 +3,13 @@
 * @license MIT
 * @author <steven@velozo.com>
 */
-var libFS = require('fs');
+const libFS = require('fs');
 
 /**
 * Dropbag File Exists Function
 *
 * This is going to be abstracted to check files in mongo gridfs next.
-* 
+*
 
  This takes a parameters object which looks like this:
 
@@ -28,25 +28,29 @@ module.exports = (pParameters, fCallback) =>
 		fCallback(new Error('Parameters object not properly passed to file exists.'));
 		return false;
 	}
-	
+
 	if ((typeof(pParameters.Path) !== 'string') || (typeof(pParameters.File) !== 'string'))
 	{
 		fCallback(new Error('Parameters object needs a file name and path to run the file exist operation.'));
 		return false;
 	}
 
-	libFS.stat(pParameters.Path + '/' + pParameters.File, 
+	libFS.stat(pParameters.Path + '/' + pParameters.File,
 		(pError, pFileStats) =>
 		{
-			if (pError && pError.code=='ENOENT')
+			if (pError && pError.code == 'ENOENT')
+			{
 				// File does not exist
-				return fCallback(false, false);
-			else if (pError)
+				return fCallback(null, false);
+			}
+			if (pError)
+			{
 				// Some other error
 				return fCallback(pError);
+			}
 
 			// File exists
-			return fCallback(false, true);
+			return fCallback(null, true);
 		});
 
 	return false;

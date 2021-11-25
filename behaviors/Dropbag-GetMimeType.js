@@ -3,7 +3,7 @@
 * @license MIT
 * @author <steven@velozo.com>
 */
-var libMime = require('mime');
+const libMime = require('mime');
 
 /**
 * Dropbag File MimeType function
@@ -13,5 +13,5 @@ var libMime = require('mime');
 
 module.exports = (pFileName) =>
 {
-	return libMime.lookup(pFileName);
+	return libMime.getType(pFileName);
 };

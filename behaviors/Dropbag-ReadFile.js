@@ -3,15 +3,15 @@
 * @license MIT
 * @author <steven@velozo.com>
 */
-var libFS = require('fs');
-var libAsync = require('async');
-var libMime = require('mime');
+const libFS = require('fs');
+const libAsync = require('async');
+const libMime = require('mime');
 
 /**
 * Dropbag File Read Function
 *
 * This is going to be abstracted to read files to mongo gridfs next.
-* 
+*
 
  This takes a parameters object which looks like this:
 
@@ -31,49 +31,54 @@ module.exports = (pParameters, fCallback) =>
 		fCallback(new Error('Parameters object not properly passed to file read.'));
 		return false;
 	}
-	
+
 	if ((typeof(pParameters.Path) !== 'string') || (typeof(pParameters.File) !== 'string'))
 	{
 		fCallback(new Error('Parameters object needs a file name and path to run the file read operation.'));
 		return false;
 	}
 
-	var tmpStream = pParameters.hasOwnProperty('Stream') ? pParameters.Stream : false;
+	const tmpStream = pParameters.hasOwnProperty('Stream') ? pParameters.Stream : false;
 
 	if (tmpStream)
 	{
-		var tmpFileFullPath = pParameters.Path + '/' + pParameters.File;
+		const tmpFileFullPath = pParameters.Path + '/' + pParameters.File;
 		libAsync.waterfall(
 			[
-				function (fStageComplete)
+				(fStageComplete) =>
 				{
 					libFS.stat(tmpFileFullPath, (pError, pFileStats) =>
 					{
 						if (pError)
+						{
 							return fStageComplete(pError, {});
-						else
-							return fStageComplete(null, pFileStats);
+						}
+						return fStageComplete(null, pFileStats);
 					});
 				},
 			],
-			function(pError, pFileStats)
+			(pError, pFileStats) =>
 			{
 				if (pError)
+				{
 					return fCallback(pError);
+				}
 
-				var tmpFileInfo = {};
+				const tmpFileInfo = {};
 				// Abstract here when mongo, etc. is broken out.
 				tmpFileInfo.Type = 'local';
 				tmpFileInfo.filename = tmpFileFullPath;
 				tmpFileInfo.length = pFileStats.size;
-				tmpFileInfo.contentType = libMime.lookup(tmpFileFullPath);
+				tmpFileInfo.contentType = libMime.getType(tmpFileFullPath);
 				tmpFileInfo.stats = pFileStats;
 				tmpFileInfo.getStream = (pStart, pEnd) =>
 				{
-					var tmpRange = {};
+					let tmpRange = {};
 					if (pStart)
+					{
 						tmpRange = {start: pStart, end: pEnd};
-					
+					}
+
 					return libFS.createReadStream(tmpFileInfo.filename, tmpRange);
 				};
 
@@ -89,19 +94,18 @@ module.exports = (pParameters, fCallback) =>
 		libFS.readFile(pParameters.Path+'/'+pParameters.File,
 			{
 				encoding: 'utf8',
-				flag: 'r'
+				flag: 'r',
 			},
-			(pError, pData)=>
+			(pError, pData) =>
 			{
 				if (pError)
 				{
-					fCallback(pError);
-					return false;
+					return fCallback(pError);
 				}
 
 				fCallback(null, pData);
-				return true;
 			}
 		);
+		return false;
 	}
 };

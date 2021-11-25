@@ -4,14 +4,14 @@
 * @author <steven@velozo.com>
 */
 
-var libAsync = require('async')
-var libRimRaf = require('rimraf');
+const libAsync = require('async')
+const libRimRaf = require('rimraf');
 
 /**
 * Dropbag Recursive Folder Delete Function
 *
 * This is going to be abstracted to store files to mongo gridfs next.
-* 
+*
 
  This takes a parameters object which looks like this:
 
@@ -29,7 +29,7 @@ module.exports = (pParameters, fCallback) =>
 		fCallback(new Error('Parameters object not properly passed to recursive folder delete.'));
 		return false;
 	}
-	
+
 	if (typeof(pParameters.Path) !== 'string')
 	{
 		fCallback(new Error('Parameters object needs a path to run the recursive folder delete operation.'));
@@ -38,16 +38,16 @@ module.exports = (pParameters, fCallback) =>
 
 	// Delete the folder tree.
 	libRimRaf(pParameters.Path,
-	    (pError)=>
+		(pError) =>
 		{
 			if (pError)
 			{
-				fCallback(new Error('Error recursively deleting a folder '+pParameters.File));
-				return false;
+				//TODO: why are we nuking the real error here?
+				return fCallback(new Error('Error recursively deleting a folder '+pParameters.File));
 			}
 
 			fCallback(null);
-			return true;
 		}
 	);
+	return false;
 };
