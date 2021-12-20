@@ -1,12 +1,13 @@
 {
   "name": "dropbag",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "File persist and read abstraction",
   "main": "Dropbag.js",
   "scripts": {
     "start": "node Dropbag.js",
-    "coverage": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha -- -u tdd -R spec",
-    "test": "./node_modules/mocha/bin/_mocha -u tdd -R spec"
+    "coverage": "nyc npm test && nyc report --reporter=lcov",
+    "test": "./node_modules/.bin/mocha -u tdd -R spec",
+    "tests": "./node_modules/.bin/mocha -u tdd -R spec -g"
   },
   "repository": {
     "type": "git",
@@ -23,21 +24,19 @@
   },
   "homepage": "https://github.com/stevenvelozo/dropbag",
   "devDependencies": {
-    "chai": "^3.4.1",
+    "chai": "^4.3.4",
     "codeclimate-test-reporter": "0.1.1",
     "coveralls": "2.11.4",
-    "istanbul": "0.4.1",
-    "mocha": "^2.3.4",
+    "mocha": "^9.1.3",
+    "nyc": "^15.1.0",
     "supertest": "1.1.0"
   },
   "dependencies": {
-    "async": "1.5.0",
-    "fable": "^1.0.1",
+    "async": "^3.2.2",
+    "fable": "^2.0.5",
     "formidable": "^1.0.17",
-    "mime": "^1.3.4",
-    "orator": "~1.0.2",
-    "restify": "^4.0.3",
-    "rimraf": "^2.5.4",
-    "underscore": "^1.8.3"
+    "mime": "^3.0.0",
+    "rimraf": "^3.0.2",
+    "underscore": "^1.13.1"
   }
 }

@@ -1,9 +1,9 @@
 /**
 * Unit tests for Dropbag
 *
-* @license     MIT
+* @license	 MIT
 *
-* @author      Steven Velozo <steven@velozo.com>
+* @author	  Steven Velozo <steven@velozo.com>
 */
 
 var Chai = require('chai');
@@ -11,7 +11,7 @@ var Expect = Chai.expect;
 
 var libFS = require('fs');
 
-var libFable = require('fable');
+var libFable = require('fable').new({});
 var libDropbag = require('../Dropbag.js').new(libFable);
 
 var TEST_STAGING = __dirname+'/stage';
@@ -53,11 +53,11 @@ suite
 						libDropbag.makeFolderRecursive({Path:TEST_STAGING},
 							(pError) =>
 							{
-								libFS.stat(TEST_STAGING, 
+								libFS.stat(TEST_STAGING,
 									(pError, pFileStats) =>
 									{
 										Expect(pError).to.equal(null, 'Dropbag should create folders recursively.');
-							
+
 										// File exists
 										return fTestDone();
 									});
@@ -72,11 +72,11 @@ suite
 						libDropbag.storeFile({Path:TEST_STAGING, File:'Test.txt', Data:'This was a test'},
 							(pError) =>
 							{
-								libFS.stat(TEST_STAGING+'/Test.txt', 
+								libFS.stat(TEST_STAGING+'/Test.txt',
 									(pError, pFileStats) =>
 									{
 										Expect(pError).to.equal(null, 'Dropbag should create files correctly.');
-							
+
 										// File exists
 										return fTestDone();
 									});
@@ -164,7 +164,8 @@ suite
 								fTestDone();
 							});
 					}
-				);				test
+				);
+				test
 				(
 					'store a file with streams',
 					(fTestDone) =>
@@ -172,16 +173,18 @@ suite
 						libDropbag.storeFile({Path:TEST_STAGING, File:'StreamWrite.txt', Stream:true},
 							(pError, pFileInfo) =>
 							{
-							    //console.log(JSON.stringify(pFileInfo));
-							    var tmpWriteStream = pFileInfo.getWriteStream();
-							    tmpWriteStream.write('First write!');
-							    // Now read it.
+								//console.log(JSON.stringify(pFileInfo));
+								var tmpWriteStream = pFileInfo.getWriteStream();
+								tmpWriteStream.write('First write!');
+								//FIXME: below stream pattern is broken on NodeJS > v14 - the file does not exist after the first write
+								// Now read it.
 								libDropbag.readFile({Path:TEST_STAGING, File:'StreamWrite.txt'},
 									(pError, pData) =>
 									{
+										Expect(pError).to.not.exist;
 										Expect(pData).to.contain('First write!');
-									    tmpWriteStream.write('Second write!');
-									    // Now read it again!
+										tmpWriteStream.write('Second write!');
+										// Now read it again!
 										libDropbag.readFile({Path:TEST_STAGING, File:'StreamWrite.txt'},
 											(pError, pData) =>
 											{
@@ -294,20 +297,20 @@ suite
 						libDropbag.makeFolderRecursive({Path:TEST_STAGING+'/This/Folder/Is/Deep'},
 							(pError) =>
 							{
-								libFS.stat(TEST_STAGING+'/This/Folder/Is/Deep', 
+								libFS.stat(TEST_STAGING+'/This/Folder/Is/Deep',
 									(pError, pFileStats) =>
 									{
 										Expect(pError).to.equal(null, 'Dropbag should create many folders recursively.');
-										
+
 										// Now store a deep file
 										libDropbag.storeFile({Path:TEST_STAGING+'/This/Folder/Is', File:'DeepTest.txt', Data:'This was a really deep test'},
 											(pError) =>
 											{
-												libFS.stat(TEST_STAGING+'/This/Folder/Is/DeepTest.txt', 
+												libFS.stat(TEST_STAGING+'/This/Folder/Is/DeepTest.txt',
 													(pError, pFileStats) =>
 													{
 														Expect(pError).to.equal(null, 'Dropbag should create files correctly.');
-											
+
 														// File exists
 														return fTestDone();
 													});
@@ -356,7 +359,7 @@ suite
 							})).to.equal(false);
 					}
 				);
-				
+
 			}
 		);
 	}

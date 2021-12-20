@@ -3,14 +3,14 @@
 * @license MIT
 * @author <steven@velozo.com>
 */
-var libFS = require('fs');
+const libFS = require('fs');
 
 /**
 * Dropbag File Listing Function
 *
-* This is going to be abstracted to check listings of files in mongo gridfs next. 
+* This is going to be abstracted to check listings of files in mongo gridfs next.
 * In gridfs (and other kvp systems) files will be tagged with the "Path".
-* 
+*
 
  This takes a parameters object which looks like this:
 
@@ -26,7 +26,7 @@ module.exports = (pParameters, fCallback) =>
 		fCallback(new Error('Parameters object not properly passed to file listing.'));
 		return false;
 	}
-	
+
 	if (typeof(pParameters.Path) !== 'string')
 	{
 		fCallback(new Error('Parameters object needs a file name and path to run the file list operation.'));
@@ -37,8 +37,10 @@ module.exports = (pParameters, fCallback) =>
 		(pError, pFiles) =>
 		{
 			if (pError)
+			{
 				return fCallback(pError, {});
-			
+			}
+
 			return fCallback(null, pParameters.Path, pFiles);
 		});
 

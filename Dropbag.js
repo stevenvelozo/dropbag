@@ -10,14 +10,14 @@
 * @class Dropbag
 * @constructor
 */
-var Dropbag = function()
+const Dropbag = function()
 {
 	function createNew(pFable)
 	{
-		var _Fable = false;
+		let _Fable = false;
 
 		// If a valid Fable object isn't passed in, MAKE ONE
-		if ((typeof(pFable) !== 'object') || (!pFable.hasOwnProperty('fable')))
+		if ((typeof(pFable) !== 'object') || !('fable' in pFable))
 		{
 			_Fable = require('fable').new();
 		}
@@ -27,33 +27,36 @@ var Dropbag = function()
 			_Fable = pFable.fable;
 		}
 
-		var makeFolderRecursive = require(`${__dirname}/behaviors/Dropbag-MakeFolderRecursive.js`);
-		var deleteFolderRecursively = require(`${__dirname}/behaviors/Dropbag-DeleteFolderRecursive.js`);
-		
-		var storeFile = require(`${__dirname}/behaviors/Dropbag-StoreFile.js`);
-		var readFile = require(`${__dirname}/behaviors/Dropbag-ReadFile.js`);
-		var deleteFile = require(`${__dirname}/behaviors/Dropbag-DeleteFile.js`);
+		const makeFolderRecursive = require(`${__dirname}/behaviors/Dropbag-MakeFolderRecursive.js`);
+		const deleteFolderRecursively = require(`${__dirname}/behaviors/Dropbag-DeleteFolderRecursive.js`);
 
-		var fileList = require(`${__dirname}/behaviors/Dropbag-ListFiles.js`);
-		var fileExists = require(`${__dirname}/behaviors/Dropbag-Exists.js`);
-		var fileInfo = require(`${__dirname}/behaviors/Dropbag-Info.js`);
-		var checkHeritage = require(`${__dirname}/behaviors/Dropbag-CheckHeritage.js`);
+		const storeFile = require(`${__dirname}/behaviors/Dropbag-StoreFile.js`);
+		const readFile = require(`${__dirname}/behaviors/Dropbag-ReadFile.js`);
+		const deleteFile = require(`${__dirname}/behaviors/Dropbag-DeleteFile.js`);
 
-		var getMimeType = require(`${__dirname}/behaviors/Dropbag-GetMimeType.js`);
+		const fileList = require(`${__dirname}/behaviors/Dropbag-ListFiles.js`);
+		const fileExists = require(`${__dirname}/behaviors/Dropbag-Exists.js`);
+		const fileInfo = require(`${__dirname}/behaviors/Dropbag-Info.js`);
+		const checkHeritage = require(`${__dirname}/behaviors/Dropbag-CheckHeritage.js`);
 
-		var _Parameters = false; 
+		const getMimeType = require(`${__dirname}/behaviors/Dropbag-GetMimeType.js`);
 
-		if (_Fable.settings.hasOwnProperty('Dropbag'))
+		let _Parameters = false;
+
+		if (_Fable.settings.Dropbag)
+		{
 			_Parameters = _Fable.settings.Dropbag;
+		}
 		else
-			_Parameters = require(__dirname+'/Dropbag-Defaults.json');
+		{
+			_Parameters = require(__dirname + '/Dropbag-Defaults.json');
+		}
 
-		var wireParameters = (pRequest, pResponse, fNext) =>
+		const wireParameters = (pRequest, pResponse, fNext) =>
 		{
 			pRequest.DropbagParameters = _Parameters;
 			fNext();
 		};
-
 
 		/**
 		* Wire up routes for the API
@@ -61,24 +64,24 @@ var Dropbag = function()
 		* @method connectRoutes
 		* @param {Object} pRestServer The Restify server object to add routes to
 		*/
-		var connectRoutes = function(pRestServer)
+		const connectRoutes = (pRestServer) =>
 		{
 			// Default to just serving from root
-			var tmpRoute = (typeof(_Parameters.RoutePrefix) === 'undefined') ? /\/.*/ : new RegExp('/'+_Parameters.RoutePrefix+'\/.*');
+			const tmpRoute = (typeof(_Parameters.RoutePrefix) === 'undefined') ? /\/.*/ : new RegExp('/' + _Parameters.RoutePrefix + '\/.*');
 
 			// Add the route
-			pRestServer.get(tmpRoute, wireParameters, require(__dirname+'/endpoints/Dropbag-Download.js'));
-			pRestServer.post(tmpRoute, wireParameters, require(__dirname+'/endpoints/Dropbag-Upload.js'));
+			pRestServer.get(tmpRoute, wireParameters, require(__dirname + '/endpoints/Dropbag-Download.js'));
+			pRestServer.post(tmpRoute, wireParameters, require(__dirname + '/endpoints/Dropbag-Upload.js'));
 		};
 
 
-		var tmpNewDropbagObject = (
+		const tmpNewDropbagObject = (
 		{
 			connectRoutes: connectRoutes,
-			
+
 			makeFolderRecursive: makeFolderRecursive,
 			deleteFolderRecursively: deleteFolderRecursively,
-			
+
 			storeFile: storeFile,
 			readFile: readFile,
 			deleteFile: deleteFile,
@@ -90,7 +93,7 @@ var Dropbag = function()
 
 			getMimeType: getMimeType,
 
-			new: createNew
+			new: createNew,
 		});
 
 		return tmpNewDropbagObject;
